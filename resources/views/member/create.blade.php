@@ -16,7 +16,7 @@
 
             <div class="card-body">
               @csrf
-              <x-input label="Nama" name="nama" />
+              <x-input label="Nama" name="nama" autofocus />
               <x-select label="Jenis Kelamin" name="jenis_kelamin" :data-option="[
                 ['value'=>'L','option'=>'Laki-laki'],
                 ['value'=>'P','option'=>'Perempuan'],

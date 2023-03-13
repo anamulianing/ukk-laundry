@@ -17,7 +17,7 @@
             <div class="card-body">
               @csrf
               @method('PUT')
-              <x-input label="Nama" name="nama" :value="$outlet->nama" />
+              <x-input label="Nama" name="nama" :value="$outlet->nama" autofocus />
               <x-input label="Telepon" name="tlp" :value="$outlet->tlp" />
               <x-textarea label="Alamat" name="alamat" :value="$outlet->alamat" />
             </div>

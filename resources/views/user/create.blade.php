@@ -16,7 +16,7 @@
 
             <div class="card-body">
               @csrf
-              <x-input label="Nama" name="nama" />
+              <x-input label="Nama" name="nama" autofocus />
               <x-input label="Username" name="username" />
               {{-- <x-input label="Foto Profile" type="file" name="foto" /> --}}
               <x-select label="Role" name="role" :data-option="[

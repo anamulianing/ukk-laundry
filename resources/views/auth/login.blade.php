@@ -17,7 +17,7 @@
         @csrf
 
         <div class="input-group">
-          <input name="username" class="form-control @error('username') is-invalid @enderror" placeholder="Username">
+          <input name="username" class="form-control @error('username') is-invalid @enderror" placeholder="Username" autofocus>
           <div class="input-group-append">
             <div class="input-group-text">
               <span class="fas fa-user"></span>

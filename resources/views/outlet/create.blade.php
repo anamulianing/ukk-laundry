@@ -16,7 +16,7 @@
 
             <div class="card-body">
               @csrf
-              <x-input label="Nama" name="nama" />
+              <x-input label="Nama" name="nama" autofocus />
               <x-input label="Telepon" name="tlp" />
               <x-textarea label="Alamat" name="alamat" />
             </div>

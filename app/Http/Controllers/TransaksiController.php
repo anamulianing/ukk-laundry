@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Auth;
 use Cart;
+use Carbon\Carbon;
 use App\Models\User;
 use App\Models\Paket;
 use App\Models\Member;
@@ -17,15 +18,15 @@ class TransaksiController extends Controller
 {
     public function index(Request $request)
     {
-        $members    = Member::select('id', 'nama')->get();
+        $members = Member::select('id', 'nama')->get();
 
-        $search     = $request->search;
-        $user       = Auth::user();
-        $outlet_id  = $user->role != 'admin' ? $user->outlet_id : null;
+        $search    = $request->search;
+        $user      = Auth::user();
+        $outlet_id = $user->role != 'admin' ? $user->outlet_id : null;
 
         $transaksis = Transaksi::join('members', 'members.id', 'transaksis.member_id')
             ->join('users', 'users.id', 'transaksis.user_id')
-            ->join('outlets', 'outlets.id', 'users.outlet_id') 
+            ->join('outlets', 'outlets.id', 'users.outlet_id')
             ->where('members.nama', 'like', "%{$search}%")
             ->when($outlet_id, function ($query, $outlet_id) {
                 return $query->where('transaksis.outlet_id', $outlet_id);
@@ -43,7 +44,7 @@ class TransaksiController extends Controller
                 'total_bayar',
                 'outlets.nama as outlet',
             )
-            ->orderBy('id','desc')
+            ->orderBy('id', 'desc')
             ->paginate(25);
 
         $transaksis->map(function ($row) {
@@ -68,7 +69,7 @@ class TransaksiController extends Controller
             ->select('id as value', 'nama_paket as option')->get();
         $items  = Cart::session($member->id)->getContent();
 
-        
+
         return view('transaksi.create', [
             'member' => $member,
             'outlet' => $outlet,
@@ -86,14 +87,15 @@ class TransaksiController extends Controller
             'keterangan' => 'nullable|max:200',
         ]);
 
-        $paket = Paket::find($request->paket);
-        $paket->qty    = $request->quantity;
+        $paket      = Paket::find($request->paket);
+        $paket->qty = $request->quantity;
 
         Cart::session($member->id)->add(
             array(
                 'id' => $paket->id,
                 'name' => $paket->nama_paket,
-                'price' => $paket->harga_diskon,   //harga_diskon
+                'price' => $paket->harga_diskon,
+                //harga_diskon
                 'quantity' => $paket->qty,
                 'attributes' => [
                     'harga_awal' => $paket->harga,
@@ -157,13 +159,13 @@ class TransaksiController extends Controller
             ]);
         }
 
-        $user            = Auth::user();
-        $qty_total       = Cart::session($member->id)->getTotalQuantity();
+        $user      = Auth::user();
+        $qty_total = Cart::session($member->id)->getTotalQuantity();
 
-        $last_transaksi  = Transaksi::orderBy('id', 'desc')->select('id')->first();
-        $last_id         = $last_transaksi ? $last_transaksi->id : 0;
-        $id              = sprintf("%04s", $last_id + 1);
-        $invoice         = date('Ymd') . $id;
+        $last_transaksi = Transaksi::orderBy('id', 'desc')->select('id')->first();
+        $last_id        = $last_transaksi ? $last_transaksi->id : 0;
+        $id             = sprintf("%04s", $last_id + 1);
+        $invoice        = date('Ymd') . $id;
 
         $query_transaksi = [
             'outlet_id' => $user->outlet_id,
@@ -186,9 +188,9 @@ class TransaksiController extends Controller
             'dibayar' => $uang_tunai ? 'dibayar' : 'belum_bayar',
         ];
 
-        $transaksi       = Transaksi::create($query_transaksi);
+        $transaksi = Transaksi::create($query_transaksi);
 
-        $items           = Cart::session($member->id)->getContent();
+        $items = Cart::session($member->id)->getContent();
 
 
         foreach ($items as $item) {
@@ -283,7 +285,13 @@ class TransaksiController extends Controller
         $transaksi->update([
             'status' => $status
         ]);
-        
+
+        if($status == 'diambil'){
+            $transaksi->update([
+                'tgl_'.$status=>Carbon::now(),
+            ]);
+        }
+
         LogActivity::add('mengubah Status Transaksi menjadi ' . $status . '.' . ' Invoice : ' . $transaksi->kode_invoice);
 
 

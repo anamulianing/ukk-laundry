@@ -17,7 +17,7 @@
             <div class="card-body">
               @csrf
               @method('PUT')
-              <x-input label="Nama" name="nama" :value="$member->nama" />
+              <x-input label="Nama" name="nama" :value="$member->nama" autofocus />
               <x-select label="Jenis Kelamin" name="jenis_kelamin" :data-option="[
                 ['value'=>'L','option'=>'Laki-laki'],
                 ['value'=>'P','option'=>'Perempuan'],

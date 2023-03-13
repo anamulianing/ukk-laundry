@@ -1,10 +1,9 @@
 <style>
-  a {
+  .info-box-number {
     color: black;
   }
   a:hover {
     color: #006eff;
-    font-size: 17px;
   }
 </style>
 @props(['dataBox'=>[]])

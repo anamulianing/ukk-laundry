@@ -29,6 +29,24 @@
           {{ ucwords( str_replace('_',' ',$transaksi->dibayar)) }}
         </span>
       </div>
+      
+      @if ($transaksi->status == 'diambil')
+        <div class="form-group">
+          <label>Tanggal Diambil</label>
+          <span> :
+            {{ date('d/m/Y H:i:s', strtotime($transaksi->tgl_diambil)) }}
+          </span>
+        </div>
+      @endif
+      
+      @if ($transaksi->dibayar == 'dibayar')
+        <div class="form-group">
+          <label>Tanggal Bayar</label>
+          <span> :
+            {{ date('d/m/Y H:i:s', strtotime($transaksi->tgl_bayar)) }}
+          </span>
+        </div>
+      @endif
     </div>
 
     <div class="col-4"></div>
@@ -89,24 +107,25 @@
           <a href="{{ route('transaksi.index') }}" class="btn btn-default mr-2">Kembali</a>
 
           <div class="dropdown">
-            @if ($transaksi->status == 'proses' || $transaksi->status == 'selesai' || $transaksi->status == 'baru' )
-            <button class="btn btn-success dropdown-toggle" type="button" data-toggle="dropdown">Pilih Status
-              Menjadi</button>
-            <div class="dropdown-menu">
-              @if ($transaksi->status == 'baru')
-                <a href="{{ route('transaksi.status',['transaksi'=>$transaksi->id, 'status'=>'proses']) }}" class="dropdown-item">Proses</a>
-                <a href="{{ route('transaksi.status',['transaksi'=>$transaksi->id, 'status'=>'batal']) }}" class="dropdown-item">Batalkan</a>
-              @elseif($transaksi->status == 'proses')
-                <a href="{{ route('transaksi.status',['transaksi'=>$transaksi->id, 'status'=>'selesai']) }}" class="dropdown-item">Selesai</a>
-              @elseif($transaksi->status == 'selesai')
-                <a href="{{ route('transaksi.status',['transaksi'=>$transaksi->id, 'status'=>'diambil']) }}" class="dropdown-item">Diambil</a>
-              @endif
-            </div>
-          @endif
-            </div>
+            @if ($transaksi->status != 'diambil' )
+              <button class="btn btn-success dropdown-toggle" type="button" data-toggle="dropdown">Pilih Status
+                Menjadi</button>
+              <div class="dropdown-menu">
+                @if ($transaksi->status == 'baru')
+                  <a href="{{ route('transaksi.status',['transaksi'=>$transaksi->id, 'status'=>'proses']) }}" class="dropdown-item">Proses</a>
+                  <a href="{{ route('transaksi.status',['transaksi'=>$transaksi->id, 'status'=>'batal']) }}" class="dropdown-item">Batalkan</a>
+                @elseif($transaksi->status == 'proses')
+                  <a href="{{ route('transaksi.status',['transaksi'=>$transaksi->id, 'status'=>'selesai']) }}" class="dropdown-item">Selesai</a>
+                @elseif($transaksi->status == 'selesai')
+                  <a href="{{ route('transaksi.status',['transaksi'=>$transaksi->id, 'status'=>'diambil']) }}" class="dropdown-item">Diambil</a>
+                @endif
+              </div>
+            @endif
+          </div>
 
         </div>
       </div>
     </div>
   </div>
 </div>
+

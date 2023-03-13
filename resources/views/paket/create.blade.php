@@ -16,7 +16,7 @@
    
             <div class="card-body">
               @csrf
-              <x-input label="Nama Paket" name="nama_paket" />
+              <x-input label="Nama Paket" name="nama_paket" autofocus />
               <div class="row">
                 <div class="col-6">
                   <x-input label="Harga" name="harga" id="harga" type="number" min="0" />

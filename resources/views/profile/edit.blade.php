@@ -19,7 +19,7 @@
 
           <div class="card-body">
             @csrf
-            <x-input label="Nama" name="nama" :value="$user->nama" />
+            <x-input label="Nama" name="nama" :value="$user->nama" autofocus />
 
             <x-input label="Username" name="username" :value="$user->username" disabled />
 

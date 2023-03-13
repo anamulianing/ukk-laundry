@@ -17,7 +17,7 @@
             <div class="card-body">
               @csrf
               @method('PUT')
-              <x-input label="Nama" name="nama" :value="$user->nama" />
+              <x-input label="Nama" name="nama" :value="$user->nama" autofocus />
               <x-input label="Username" name="username" :value="$user->username" />
               {{-- <div class="form-group">
                 <img src="{{ $user->foto }}" class="img-fluid">

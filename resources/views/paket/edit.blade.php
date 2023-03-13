@@ -17,13 +17,13 @@
             <div class="card-body">
               @csrf
               @method('PUT')
-              <x-input label="Nama Paket" name="nama_paket" :value="$paket->nama_paket" />
+              <x-input label="Nama Paket" name="nama_paket" :value="$paket->nama_paket" autofocus />
               <div class="row">
                 <div class="col-6">
-                  <x-input label="Harga" name="harga" id="harga" :value="$paket->harga" />
+                  <x-input label="Harga" name="harga" id="harga" :value="$paket->harga" type="number" min="0" />
                 </div>
                 <div class="col-6">
-                  <x-input label="Diskon(%)" name="diskon" id="diskon" :value="$paket->diskon" />
+                  <x-input label="Diskon(%)" name="diskon" id="diskon" :value="$paket->diskon" type="number" />
                 </div>
               </div>
               <div class="text-muted">
@@ -54,19 +54,32 @@
 @endsection
 @push('js')
     <script>
-      const harga = document.getElementById('harga');
-      const diskon = document.getElementById('diskon');
-      const total = document.getElementById('total');
+      $(document).ready(function () {
+        const harga = document.getElementById('harga');
+        const diskon = document.getElementById('diskon');
+        const harga_diskon = document.getElementById('harga_diskon');
+  
+        function kalkulasiTotal() {
+          const th = harga.value;             //total harga
+          const dp = diskon.value / 100;      //diskon persen
+          const dh = th - (th * dp);               //harga diskon
 
-      function kalkulasiTotal() {
-        const th = harga.value;             //total harga
-        const dp = diskon.value / 100;      //diskon persen
-        const dh = th - (th * dp);               //harga diskon
-        total.innerText = `Rp. ${dh.toLocaleString()}`;
-      }
+          if (dh < 0) {
+            $('#harga_diskon').value;
+            alert('Diskon tidak boleh melebihi harga.');
+            $('button[type="submit"]').attr('disabled', true);
+            return;
+          }
+          $('#harga_diskon').value;
+          $('button[type="submit"]').attr('disabled', false);
 
-      harga.addEventListener('input',kalkulasiTotal);
-      diskon.addEventListener('input',kalkulasiTotal);
-      kalkulasiTotal();
+          harga_diskon.innerText = `Rp. ${dh.toLocaleString()}`;
+        }
+
+        harga.addEventListener('input',kalkulasiTotal);
+        diskon.addEventListener('input',kalkulasiTotal);
+        kalkulasiTotal();
+      })
+
     </script>
 @endpush
